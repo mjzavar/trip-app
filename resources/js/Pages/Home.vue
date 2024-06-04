@@ -1,10 +1,15 @@
-<script setup>
+<script  setup>
+
 
 </script>
 
-<template>
- <div>Hello</div>
+<template >
+    <LeftPanel >left data</LeftPanel>
+    <RightPanel> right data </RightPanel>
 </template>
+
+
+
 
 <style scoped>
 

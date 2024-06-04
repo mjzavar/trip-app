@@ -2,8 +2,14 @@
 
 namespace Database\Seeders;
 
+use App\Models\Driver;
+use App\Models\Task;
+use App\Models\Truck;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Database\Factories\DriverFactory;
+use Database\Factories\TaskFactory;
+use Database\Factories\TruckFactory;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -15,9 +21,15 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+//        User::factory()->create([
+//            'name' => 'Test User',
+//            'email' => 'test@example.com',
+//        ]);
+
+        Truck::factory()->count(10)->create();
+        Driver::factory()->count(10)->create();
+        Task::factory()->count(50)->create();
+
+
     }
 }
