@@ -3,7 +3,6 @@ export default {
     props: ['loading' , 'text'],
     methods : {
         emitAction : function(){
-            console.log(this.loading)
             this.$emit('buttonClick')
         }
     }

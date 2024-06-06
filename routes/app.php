@@ -1,10 +1,9 @@
 <?php
 use Illuminate\Support\Facades\Route;
 USE \App\Http\Controllers\{
-    HomeController , TruckController , TaskController , TripController , DriverController
+     TruckController , TaskController , TripController , DriverController
 };
-Route::get('/' , [HomeController::class , 'home'])->name('home');
-Route::get('/about' , [HomeController::class , 'about'])->name('about');
+Route::get('/' , fn()=> [] )->name('home');
 
 Route::prefix('trucks')->group(function () {
     Route::get('/'  , TruckController::class)->name('trucks');

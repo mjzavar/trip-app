@@ -22,15 +22,12 @@ class RenderHandler
         $response = $next($request);
 
         throw_if( $response->exception instanceof  \Throwable , $response->exception)   ;
-        if(!method_exists( $response, 'getData'))
-        {
-            $responseData =  $response;
-        }
-        else
-        {
-            $responseData  = $response->getData(true) ;
-        }
 
+
+        $responseData =  match(method_exists( $response, 'getData')){
+            true   => $response->getData(true) ,
+            false  => $response
+        };
 
         return match(ResponseType::from($responseType)){
             ResponseType::WEB => inertia(  $this->getViewName()  ,$responseData ) ,

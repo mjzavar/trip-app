@@ -1,41 +1,23 @@
 <script setup>
-import Modal from "@/Components/Modals/AssignTask.vue";
+import AssignTaskModal from "@/Components/Modals/AssignTask.vue";
 </script>
 <script >
 
-import {reactive} from 'vue';
 import axios from "axios";
 export default {
     data() {
         return {
-            assignee : false  ,
             filters  : [{id : 'all' , title : 'all'} ,{id : 'assigned' , title : 'assigned'} , {id : 'not-assigned' , title : 'not assigned'} , ] ,
             filter   : 'all' ,
             tasks : [] ,
-            errors: {
-                render : null ,
-                register  : null ,
-            } ,
-            loading: {
-                render : true  ,
-                register  : false ,
-            } ,
         }
     },
     created() {
 
-        this.resourceManager.registerResoures('Tasks' ,  [
+        this.resourceManager.registerResoures(this ,  [
             { resource : 'tasks' , route : {name : 'api.tasks' } },
         ])
 
-        this.emitter.on("resourceRendered", (response) => {
-            console.log("resourceRendered" , response.route)
-            let findResource    = this.resourceManager.findResource('Tasks' , response.route)
-            if(findResource)
-            {
-                this[findResource.resource] = response.resource.data
-            }
-        });
     },
     methods: {
         filterTasks: async function(){
@@ -55,8 +37,7 @@ export default {
 
 <template>
 
-    <h2 class="font-bold divide-y divide-solid"></h2>
-    <Modal  />
+    <AssignTaskModal  />
 
 
     <v-select
@@ -85,11 +66,8 @@ export default {
                         not assigned
                     </v-chip>
                 </div>
-
             </div>
-
         </li>
-        <!-- ... -->
     </ul>
 
 

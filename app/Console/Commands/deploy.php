@@ -33,7 +33,6 @@ class deploy extends Command
     public function handle()
     {
         $commands = [
-            'composer' =>'composer install' ,
             'migration' => 'php artisan migrate' ,
         ];
 
@@ -61,7 +60,7 @@ class deploy extends Command
             $commands['seed'] = 'php artisan db:seed';
         }
 
-        $commands['npm'] = 'npm install';
+      //  $commands['npm'] = 'npm install';
 
 
 

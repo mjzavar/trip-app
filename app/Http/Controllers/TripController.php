@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 use App\Http\Requests\AssignTaskRequest;
 use App\Http\Requests\TripRequest;
@@ -11,7 +10,7 @@ class TripController extends Controller
 {
     public function index()
     {
-       return Trip::with('driver' , 'truck' , 'task')->get();
+       return Trip::with('driver' , 'truck' , 'tasks')->get();
     }
 
     function create(TripRequest $request)
@@ -26,7 +25,7 @@ class TripController extends Controller
         return (
             new TaskAssignment($task , $trip)
         )
-            ->assign();
+            ->run();
     }
 
 }

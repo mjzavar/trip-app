@@ -22,7 +22,7 @@ class AssignTaskRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'overwrite' => ['nullable', 'in:0,1' ]
+            'overwrite' => ['required', 'in:0,1' ]
         ];
     }
 }

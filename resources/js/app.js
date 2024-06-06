@@ -2,14 +2,12 @@ import { createApp, h } from 'vue'
 import { createInertiaApp , Link } from '@inertiajs/vue3'
 import Master from './Layouts/Master.vue';
 import { ZiggyVue  } from '../../vendor/tightenco/ziggy';
-import LeftPanel from "@/Components/LeftPanel.vue";
-import RightPanel from "@/Components/RightPanel.vue";
-import mitt from 'mitt'
-import {resourceManager} from './resourceManager.js'
 import 'vuetify/styles'
 import { createVuetify } from 'vuetify'
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
+import mitt from 'mitt'
+import {resourceManager} from './resourceManager.js'
 
 const vuetify = createVuetify({
     components,
@@ -31,9 +29,7 @@ createInertiaApp({
             .use(plugin)
             .use(ZiggyVue )
             .use(vuetify )
-            .component('Link' , Link)
-            .component('LeftPanel' , LeftPanel)
-            .component('RightPanel' , RightPanel);
+            .component('Link' , Link);
 
         app.config.globalProperties.emitter = emitter
         app.config.globalProperties.resourceManager = new resourceManager(emitter)

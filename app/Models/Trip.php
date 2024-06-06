@@ -5,11 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use \Illuminate\Database\Eloquent\Relations\BelongsTo ;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+
 class Trip extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'title' , 'driver_id' , 'truck_id' , 'task_id'
+        'title' , 'driver_id' , 'truck_id'
     ];
 
     function driver(): BelongsTo
@@ -22,8 +24,8 @@ class Trip extends Model
         return $this->belongsTo(Truck::class);
     }
 
-    function task(): BelongsTo
+    function tasks(): BelongsToMany
     {
-        return $this->belongsTo(Task::class);
+        return $this->belongsToMany(Task::class , TripTask::class);
     }
 }

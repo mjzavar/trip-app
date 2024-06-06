@@ -7,8 +7,6 @@ import Button from "@/Components/Button.vue";
 
 export default {
     components : {Button} ,
-
-
     data() {
         return {
             tab: 0,
@@ -16,18 +14,9 @@ export default {
         }
     },
     created() {
-
-        this.resourceManager.registerResoures('Trips'  ,  [
+        this.resourceManager.registerResoures(this  ,  [
             { resource : 'trips' , route : { name : 'api.trips' } }
         ])
-
-        this.emitter.on("resourceRendered", (response) => {
-            let findResource    = this.resourceManager.findResource('Trips' , response.route)
-            if(findResource)
-            {
-                this[findResource.resource] = response.resource.data
-            }
-        });
     }
 
 }
@@ -45,7 +34,7 @@ export default {
                 color="primary"
                 direction="vertical"
             >
-                <v-tab prepend-icon="mdi-account" v-for="(trip,index) in trips" :text="trip.title" :value="index"></v-tab>
+                <v-tab prepend-icon="mdi-account" v-for="(trip,index) in trips" :text="`${trip.title}  (${trip.task_count})`" :value="index"></v-tab>
             </v-tabs>
 
             <v-tabs-window v-model="tab">
@@ -57,23 +46,36 @@ export default {
                                 <v-table >
                                     <thead>
                                     <tr>
-                                        <th class="font-bold text-blue-600">Trip</th>
-                                        <th  > {{trip.title}}</th>
+                                        <th class="font-bold text-blue-600">Trip:</th>
+                                        <th  > {{trip.title}} </th>
                                     </tr>
                                     </thead>
 
                                     <tbody>
                                     <tr>
-                                        <th class="font-bold text-blue-600">Driver</th>
+                                        <th class="font-bold text-blue-600">Driver:</th>
                                         <td>{{ trip.driver?.name }}</td>
                                     </tr>
                                     <tr>
-                                        <th class="font-bold  text-blue-600">Truck</th>
+                                        <th class="font-bold  text-blue-600">Truck:</th>
                                         <td>{{ trip.truck?.title }}</td>
                                     </tr>
                                     <tr>
-                                        <th class="font-bold  text-blue-600">Task</th>
-                                        <td>{{ trip.task?.title || '-' }}</td>
+                                        <th class="font-bold  text-blue-600">Tasks:</th>
+                                        <td>
+
+                                            <ul class="list-inside divide-y divide-solid divide-gray ">
+                                                <li v-for="(task, index) in trip.tasks" class="p-2 text-gray-600 hover:bg-gray-100">
+                                                    <div class="grid grid-cols-2">
+                                                        <div>
+                                                           {{task.title}}
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            </ul>
+
+
+                                        </td>
                                     </tr>
                                     </tbody>
                                 </v-table>

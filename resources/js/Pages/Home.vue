@@ -1,30 +1,14 @@
 <script  setup>
-
-import Tasks from "@/Components/Tasks.vue";
-import Trips from "@/Components/Trips.vue";
-
-
-</script>
-
-<script>
-export default {
-    data() {
-        return {
-            show : false
-        }
-    } ,
-
-}
+import Tasks      from "@/Components/Tasks.vue";
+import Trips      from "@/Components/Trips.vue";
+import LeftPanel  from "@/Components/LeftPanel.vue";
+import RightPanel from "@/Components/RightPanel.vue";
 </script>
 
 <template >
-
-    <LeftPanel ><Tasks  /></LeftPanel>
-    <RightPanel > <button @click="show=true" >show</button><div ><Trips />  </div></RightPanel>
+    <LeftPanel>  <Tasks />  </LeftPanel>
+    <RightPanel> <Trips />  </RightPanel>
 </template>
-
-
-
 
 <style scoped>
 

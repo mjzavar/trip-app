@@ -10,38 +10,39 @@ export default {
 
     data() {
         return {
-            form:{
-                title : null,
-                driver_id : null,
-                truck_id : null,
-            } ,
-            drivers: [],
-            trucks: [],
+            form: this.defaultForm() ,
+            drivers : [],
+            trucks  : [],
             dialog  : false ,
-            errors: {
-                render : null ,
-                register  : null ,
-            } ,
-            loading: {
-                render : false   ,
-                register  : false ,
-            } ,
+            error   : false  ,
+            loading : false  ,
         }
     },
     methods: {
         openDialog(){
             this.dialog = true ;
-            this.form = {
+            this.resetDialog();
+        },
+        closeDialog(){
+            this.dialog = false ;
+            this.resetDialog();
+        },
+        resetDialog(){
+            this.error   = false
+            this.loading = false
+            this.form    = this.defaultForm()
+        },
+
+
+        defaultForm(){
+            return {
                 title : null,
                 driver_id : null,
                 truck_id : null,
             }
-
         },
         async register(){
-
-            this.loading.register = true
-
+            this.loading = true
             try {
                  let response = (await axios.post(route('api.trips.create') , this.form )).data
                  this.dialog = false
@@ -49,55 +50,37 @@ export default {
                    'api.trips'
                  ]);
             } catch (error) {
-                this.errors.register  = error.response.data.message || error.toString()
-                this.loading.register = false
+                this.error   = error.response.data.message || error.toString()
             } finally {
-                this.loading.register = false
+                this.loading = false
             }
         },
 
     },
     created() {
 
-        this.resourceManager.registerResoures( 'CreateTask' , [
+        this.resourceManager.registerResoures( this , [
             { resource : 'drivers' , route : {name : 'api.drivers'} },
             { resource : 'trucks' , route : { name : 'api.trucks' } },
         ])
 
-        this.emitter.on("resourceRendered", (response) => {
-
-            let findResource    = this.resourceManager.findResource('CreateTask' , response.route)
-
-            if(findResource)
-            {
-                this[findResource.resource] = response.resource.data
-            }
-        });
     },
-
-
 }
 </script>
 
-
-
 <template>
-    <Button @click="openDialog()"  color="surface-variant"  text="Create A Trip" variant="flat"/>
+    <Button @click="openDialog()"  color="surface-variant"  text="create a trip" variant="flat"/>
 
     <v-dialog v-model="dialog"  max-width="500">
-        <v-alert v-if="errors.render"
-                 :text="error"
-                 title="Error"
-                 type="warning"
-        ></v-alert>
 
-        <v-card v-if="!errors.render" title="Create a New Trip ....">
+
+        <v-card  title="Create a New Trip">
             <v-card-text>
 
                 <v-sheet class="mx-auto" width="300">
 
-                    <v-alert v-if="errors.register"
-                             :text="errors.register"
+                    <v-alert v-if="error"
+                             :text="error"
                              type="error"
                     ></v-alert>
 
@@ -124,7 +107,7 @@ export default {
                             item-value="id"
                         ></v-select>
 
-                        <Button :loading="loading.register" text="Create"   v-on:buttonClick="register"/>
+                        <Button :loading="loading" text="Create"   v-on:buttonClick="register"/>
 
                     </v-form>
                 </v-sheet>
@@ -135,8 +118,8 @@ export default {
                 <v-spacer></v-spacer>
 
                 <v-btn
-                    text="Close Dialog"
-                    @click="isActive.value = false"
+                    text="Close"
+                    @click="closeDialog"
                 ></v-btn>
             </v-card-actions>
         </v-card>

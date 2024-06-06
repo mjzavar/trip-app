@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('trips', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('task_id')->unique()->nullable()->constrained();
             $table->foreignId('driver_id')->constrained();
             $table->foreignId('truck_id')->constrained();
             $table->string('title');
+            $table->integer('task_count')->default(0);
             $table->timestamps();
         });
     }

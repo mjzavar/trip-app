@@ -6,7 +6,6 @@ import {reactive} from 'vue';
 import axios from "axios";
 export default {
     components : {Button} ,
-    props : [ 'assignee'],
 
     data() {
         return {
@@ -15,27 +14,19 @@ export default {
             task: null,
             trip_id: null,
             overwrite : false ,
-            loading : { register : false } ,
-            errors : { text : null, code : 0  } ,
+            loading : false  ,
+            errors : this.defaultErrors() ,
         }
     },
     created() {
 
-        this.resourceManager.registerResoures('AssignTasks' ,  [
+        this.resourceManager.registerResoures(this,  [
             { resource : 'trips' , route : {name : 'api.trips' } },
         ])
 
 
-        this.emitter.on("resourceRendered", (response) => {
-            let findResource    = this.resourceManager.findResource('AssignTasks' , response.route)
-            if(findResource)
-            {
-                this[findResource.resource] = response.resource.data
-            }
-        });
-
         this.emitter.on("initAssignTask", (task) => {
-            this.resetErrors()
+            this.errors = this.defaultErrors()
             this.dialog    =   true
             this.overwrite =   0
             this.trip_id   =   task.trip?.id || null
@@ -45,36 +36,37 @@ export default {
 
     methods: {
         async register(){
-            this.resetErrors()
-            this.loading.register = true
-            this.resetErrors()
+            this.errors = this.defaultErrors()
+            this.loading = true
             let payload  = {trip:this.trip_id , task : this.task?.id , overwrite : this.overwrite} ;
 
-
             try {
+
                 await axios.patch(route('api.trips.tasks.assign' , payload )  )
                 this.resourceManager.updateResources([
                      'api.tasks',
                      'api.trips',
                 ]);
+
                 this.closeDialog()
+
             } catch (error) {
 
                 this.errors.text  = error.response?.data?.message || error.toString()
                 this.errors.code  =  error.response.status
-                this.loading.register = false
+                this.loading = false
             } finally {
-                this.loading.register = false
+                this.loading = false
             }
         },
         closeDialog : function (){
             this.dialog = false
             this.task = null
-            this.resetErrors()
+            this.errors = this.defaultErrors()
         } ,
-        resetErrors : function(){
-            this.errors.text = null
-            this.errors.code = 0
+
+        defaultErrors : function(){
+            return { text : null, code : 0  }
         }
 
     }
@@ -88,21 +80,19 @@ export default {
 
     <div class="text-center pa-4">
 
-
         <v-dialog
             v-model="dialog"
             width="auto"
         >
 
-            <v-card  title="Assign trip to">
+            <v-card  >
                 <v-card-text>
 
                     <v-sheet class="mx-auto" width="300">
 
-                        <div>
-                            Assign "{{task?.title}}"  to a trip :
+                        <div class="mb-2">
+                            assign "{{task?.title}}"  to a trip :
                         </div>
-
 
                         <v-form @submit.prevent>
 
@@ -122,11 +112,7 @@ export default {
                                 </div>
                             </div>
 
-
-
-
-
-                            <Button   text="Create" :loading="loading.register"  v-on:buttonClick="register" />
+                            <Button   text="Assign" :loading="loading"  v-on:buttonClick="register" />
 
                         </v-form>
                     </v-sheet>
@@ -135,16 +121,12 @@ export default {
 
                 <v-card-actions>
                     <v-spacer></v-spacer>
-
                     <v-btn
                         text="Close Dialog"
                         @click="closeDialog"
                     ></v-btn>
                 </v-card-actions>
             </v-card>
-
-
-
 
 
         </v-dialog>

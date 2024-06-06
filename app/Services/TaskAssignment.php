@@ -8,56 +8,36 @@ use App\Models\Trip;
 use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Support\Facades\DB;
 
-class TaskAssignment
+class TaskAssignment extends  DbQueueWorker
 {
-    private $operationQueue ;
     public function __construct( private readonly Task $task , private readonly Trip $trip)
     {
-        $this->operationQueue = collect();
+        Parent::__construct();
     }
 
-
-
-    public function assign()
+    public function run()
     {
-
         if(request()->overwrite == 1 && $this->task->trip )
         {
-            $this->operationQueue->push(
-                fn() => $this->task->trip()->update(['task_id' => null ])
+            $this->push(
+                fn() => $this->task->trip->tasks()->detach($this->task)
             );
         }
 
-        $this->operationQueue->push(
-            fn() => $this->trip->update(['task_id' => $this->task->id])
+        $this->push(
+            fn() => $this->trip->tasks()->attach($this->task)
         );
 
-        return $this->execute();
-    }
-
-    private function execute()
-    {
-        DB::beginTransaction();
         try
         {
-            $results[] = $this->operationQueue->each(
-                fn($operation) => $operation()
-            );
-
-            DB::commit();
-            return $results ;
-
+            return $this->execute();
         }
         catch (UniqueConstraintViolationException $exception )
         {
-            DB::rollBack();
             throw new AlreadyAssignedTaskException();
         }
-        catch (\Exception $exception )
-        {
-            DB::rollBack();
-            throw $exception;
-        }
+
 
     }
+
 }
