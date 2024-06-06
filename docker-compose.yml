@@ -4,8 +4,8 @@ services:
     app:
         build:
             context: .
-            dockerfile: Dockerfile
-        image: my-laravel-app
+            dockerfile: docker/Dockerfile
+        image: laravel-app
         container_name: laravel
         restart: unless-stopped
         working_dir: /var/www

@@ -30,10 +30,10 @@ WORKDIR /var/www
 RUN rm -rf /var/www/html
 
 # Copy existing application directory contents
-COPY . /var/www
+COPY .. /var/www
 
 # Copy existing application directory permissions
-COPY --chown=www-data:www-data . /var/www
+COPY --chown=www-data:www-data .. /var/www
 
 # Change current user to www
 USER www-data

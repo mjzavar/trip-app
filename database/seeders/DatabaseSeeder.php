@@ -19,17 +19,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-//        User::factory()->create([
-//            'name' => 'Test User',
-//            'email' => 'test@example.com',
-//        ]);
-
         Truck::factory()->count(10)->create();
         Driver::factory()->count(10)->create();
         Task::factory()->count(50)->create();
-
-
     }
 }
