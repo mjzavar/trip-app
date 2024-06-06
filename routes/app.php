@@ -6,18 +6,22 @@ USE \App\Http\Controllers\{
 Route::get('/' , [HomeController::class , 'home'])->name('home');
 Route::get('/about' , [HomeController::class , 'about'])->name('about');
 
-Route::prefix('trucks')->controller(TruckController::class)->group(function () {
-    Route::get('/')->name('trucks');
+Route::prefix('trucks')->group(function () {
+    Route::get('/'  , TruckController::class)->name('trucks');
 });
 
-Route::prefix('tasks')->controller(TaskController::class)->group(function () {
-    Route::get('/')->name('tasks');
+Route::prefix('tasks')->group(function () {
+    Route::get('/' , TaskController::class )->name('tasks');
 });
+
+
+Route::prefix('drivers')->group(function () {
+    Route::get('/' , DriverController::class)->name('drivers');
+});
+
 
 Route::prefix('trips')->controller(TripController::class)->group(function () {
-    Route::get('/')->name('trips');
-});
-
-Route::prefix('drivers')->controller(DriverController::class)->group(function () {
-    Route::get('/')->name('drivers');
+    Route::get('/' , 'index')->name('trips');
+    Route::post('/' , 'create')->name('trips.create');
+    Route::patch('/{trip}/{task}' , 'assignTask')->name('trips.tasks.assign');
 });
