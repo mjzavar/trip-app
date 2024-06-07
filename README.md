@@ -28,8 +28,9 @@ open the app url in your browser and we are done
 http://localhost:8000
 ```
 
+## directories 
 
-Here are the sourcecode directories for the backend
+Sourcecode directories for the backend
 
 
 controllers : 
