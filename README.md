@@ -14,7 +14,7 @@ docker-compose up -d
 
 To migrate and seed the database , enter the app container  
 ```
-docker exec -it app bash
+docker exec -it trip-app bash
 ```
 
 And run this command

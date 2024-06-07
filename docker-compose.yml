@@ -2,9 +2,9 @@ services:
     app:
         build:
             context: .
-            dockerfile: docker/Dockerfile
+            dockerfile: ./docker/Dockerfile
         image: laravel-app
-        container_name: app
+        container_name: trip-app
         restart: unless-stopped
         working_dir: /var/www
         volumes:
@@ -18,7 +18,7 @@ services:
 
     nginx:
         image: nginx:alpine
-        container_name: nginx
+        container_name: trip-nginx
         ports:
             - "8000:80"
         volumes:
@@ -35,7 +35,7 @@ services:
             context: .
             dockerfile: ./docker/Dockerfile.node
         image: node
-        container_name: node
+        container_name: trip-node
         ports:
             - "4000:4000"
         restart: unless-stopped
@@ -50,7 +50,7 @@ services:
     db:
         platform: linux/x86_64
         image: mysql:8.0
-        container_name: my-mysql
+        container_name: trip-mysql
         restart: unless-stopped
         environment:
             MYSQL_DATABASE: ${DB_DATABASE}
