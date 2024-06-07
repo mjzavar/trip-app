@@ -44,8 +44,8 @@ RUN chown -R www-data:www-data /var/www
 # Change current user to www
 USER www-data
 
-#RUN composer install --no-interaction
-#RUN composer dump-autoload
+RUN composer install --no-interaction
+RUN composer dump-autoload
 
 
 # Expose port 9000 and start php-fpm server
