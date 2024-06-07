@@ -53,7 +53,7 @@ export default {
                      'api.tasks',
                      'api.trips',
                 ]);
-
+                this.emitter.emit("newTaskAssignment"  , true  );
                 this.closeDialog()
 
             } catch (error) {
