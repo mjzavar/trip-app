@@ -10,7 +10,7 @@ services:
         volumes:
             - /var/www/vendor
             - ./:/var/www
-            - ./.env.docker:/var/www/.env
+            - ./.env:/var/www/.env
         environment:
             - APP_ENV=local
         networks:
