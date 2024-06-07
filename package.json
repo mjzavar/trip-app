@@ -17,6 +17,7 @@
         "@inertiajs/vue3": "^1.1.0",
         "@vitejs/plugin-vue": "^5.0.5",
         "mitt": "^3.0.1",
-        "vuetify": "^3.6.8"
+        "vuetify": "^3.6.8",
+        "ziggy-js": "^2.2.1"
     }
 }

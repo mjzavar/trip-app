@@ -1,8 +1,5 @@
-
 <script >
 import Button from "@/Components/Button.vue";
-
-import {reactive} from 'vue';
 import axios from "axios";
 export default {
     components : {Button} ,
@@ -32,8 +29,6 @@ export default {
             this.loading = false
             this.form    = this.defaultForm()
         },
-
-
         defaultForm(){
             return {
                 title : null,
@@ -50,7 +45,7 @@ export default {
                    'api.trips'
                  ]);
             } catch (error) {
-                this.error   = error.response.data.message || error.toString()
+                this.error   = error.response?.data?.message || error.toString()
             } finally {
                 this.loading = false
             }
@@ -59,7 +54,7 @@ export default {
     },
     created() {
 
-        this.resourceManager.registerResoures( this , [
+        this.resourceManager.registerComponent( this , [
             { resource : 'drivers' , route : {name : 'api.drivers'} },
             { resource : 'trucks' , route : { name : 'api.trucks' } },
         ])

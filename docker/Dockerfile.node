@@ -13,8 +13,9 @@ RUN npm install
 # Copy project files into the docker image
 COPY . .
 
+
 # Expose the port Vite runs on
-EXPOSE 3000
+EXPOSE 4000
 
 # Start the Vite server
 CMD ["npm", "run", "dev"]

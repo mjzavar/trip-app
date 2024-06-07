@@ -13,11 +13,9 @@ export default {
         }
     },
     created() {
-
-        this.resourceManager.registerResoures(this ,  [
+        this.resourceManager.registerComponent(this ,  [
             { resource : 'tasks' , route : {name : 'api.tasks' } },
         ])
-
     },
     methods: {
         filterTasks: async function(){
@@ -28,9 +26,6 @@ export default {
             this.emitter.emit("initAssignTask" ,  task);
         },
     },
-
-
-
 
 }
 </script>

@@ -14,7 +14,7 @@ export default {
         }
     },
     created() {
-        this.resourceManager.registerResoures(this  ,  [
+        this.resourceManager.registerComponent(this  ,  [
             { resource : 'trips' , route : { name : 'api.trips' } }
         ])
     }

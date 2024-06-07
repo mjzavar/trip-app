@@ -1,17 +1,16 @@
-version: '3.8'
-
 services:
     app:
         build:
             context: .
             dockerfile: docker/Dockerfile
         image: laravel-app
-        container_name: laravel
+        container_name: app
         restart: unless-stopped
         working_dir: /var/www
         volumes:
+            - /var/www/vendor
             - ./:/var/www
-            - ./.env:/var/www/.env
+            - ./.env.docker:/var/www/.env
         environment:
             - APP_ENV=local
         networks:
@@ -38,12 +37,13 @@ services:
         image: node
         container_name: node
         ports:
-            - "3000:3000"
+            - "4000:4000"
         restart: unless-stopped
         working_dir: /var/www
         volumes:
             - ./:/var/www
             - /var/www/node_modules
+            - ./vite.config.docker.js:/var/www/vite.config.js
         networks:
             - app-network
 
@@ -63,6 +63,7 @@ services:
             - app-network
         ports:
             - "3306:3306"
+        command: ["--log_bin_trust_function_creators=1"]
 
 networks:
     app-network:

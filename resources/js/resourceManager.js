@@ -6,42 +6,43 @@ class resourceManager {
         this.resources = {}
         this.components = {};
         this.loadQueue = {};
-        this.resourceProgress = false  ;
+        this.resourceLoadProgress = false  ;
         this.emitter = emitter
-        setInterval(()=>{
-
-            if( Object.keys(this.loadQueue).length  > 0)
-            {
-                if(this.resourceProgress === false )
-                {
-                    this.resourceProgress = true
-                    this.emitter.emit("resourceProgress" , true );
-                }
-            }
-            else if(this.resourceProgress === true  )
-            {
-                this.resourceProgress = false
-                this.emitter.emit("resourceProgress" , false  );
-            }
-        }, 1000 );
+        this.updateQueueStatus()
     }
 
 
+   updateQueueStatus(){
+       setInterval(()=>{
 
+           if( Object.keys(this.loadQueue).length  > 0)
+           {
+               if(this.resourceLoadProgress === false )
+               {
+                   this.resourceLoadProgress = true
+                   this.emitter.emit("resourceProgress" , true );
+               }
+           }
+           else if(this.resourceLoadProgress === true  )
+           {
+               this.resourceLoadProgress = false
+               this.emitter.emit("resourceProgress" , false  );
+           }
+       }, 1000 );
 
-    registerResoures(component, resources ){
+   }
+
+    registerComponent(component, resources ){
         let component_key =   component.$options.__file?.split('resources/') [1]|| component.$.uid;
         this.log(` registering registerResoures ${component_key}`)
         this.components[component_key] = {component , resources} ;
         resources.forEach((item) => this.callApi(item.route) )
-        this.fillComponent(component_key)
+        this.seedMountedComponent(component_key)
     }
-
 
     updateResources(routes){
         routes.forEach( (route) => this.callApi({name : route  , overwrite:true } ) );
     }
-
 
     async callApi({name , payload = {}, method = 'get'  , overwrite = false }  ){
         this.log('call -> ')
@@ -78,14 +79,14 @@ class resourceManager {
         }
         finally {
             this.emitter.emit("resourceRendered" ,  { route : name ,  resource : this.resources[name] });
-            this.addResourceToComponents(name);
+            this.addAvailableResourceToComponents(name);
             delete  this.loadQueue[requestID];
         }
 
         return this.resources[name] ;
     }
 
-    addResourceToComponents(availableResourceRouteName){
+    addAvailableResourceToComponents(availableResourceRouteName){
         for (const componentName in this.components) {
             this.components[componentName].resources.forEach( (componentResource) => {
                 if(availableResourceRouteName === componentResource.route.name )
@@ -96,7 +97,7 @@ class resourceManager {
         }
     }
 
-    fillComponent(componentName ){
+    seedMountedComponent(componentName ){
 
         for (const resourceRouteName  in this.resources) {
             this.components[componentName].resources.forEach( (componentResource) => {

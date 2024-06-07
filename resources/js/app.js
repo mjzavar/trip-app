@@ -1,7 +1,7 @@
 import { createApp, h } from 'vue'
 import { createInertiaApp , Link } from '@inertiajs/vue3'
 import Master from './Layouts/Master.vue';
-import { ZiggyVue  } from '../../vendor/tightenco/ziggy';
+import { ZiggyVue } from 'ziggy-js';
 import 'vuetify/styles'
 import { createVuetify } from 'vuetify'
 import * as components from 'vuetify/components'

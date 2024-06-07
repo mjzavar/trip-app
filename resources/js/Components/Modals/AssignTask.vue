@@ -16,14 +16,19 @@ export default {
             overwrite : false ,
             loading : false  ,
             errors : this.defaultErrors() ,
+            rules: [
+                value => {
+                    if (value) return true
+                    return 'You must select a trip.'
+                },
+            ],
         }
     },
     created() {
 
-        this.resourceManager.registerResoures(this,  [
+        this.resourceManager.registerComponent(this,  [
             { resource : 'trips' , route : {name : 'api.trips' } },
         ])
-
 
         this.emitter.on("initAssignTask", (task) => {
             this.errors = this.defaultErrors()
@@ -36,6 +41,7 @@ export default {
 
     methods: {
         async register(){
+            if(!this.trip_id) return ;
             this.errors = this.defaultErrors()
             this.loading = true
             let payload  = {trip:this.trip_id , task : this.task?.id , overwrite : this.overwrite} ;
@@ -53,8 +59,9 @@ export default {
             } catch (error) {
 
                 this.errors.text  = error.response?.data?.message || error.toString()
-                this.errors.code  =  error.response.status
+                this.errors.code  = error.response?.status || 500
                 this.loading = false
+
             } finally {
                 this.loading = false
             }
@@ -100,6 +107,7 @@ export default {
                                 label="Trip"
                                 v-model="trip_id"
                                 :items="trips"
+                                :rules="rules"
                                 item-title="title"
                                 item-value="id"
                             ></v-select>
@@ -112,7 +120,7 @@ export default {
                                 </div>
                             </div>
 
-                            <Button   text="Assign" :loading="loading"  v-on:buttonClick="register" />
+                            <Button   text="Assign" :loading="loading"  v-on:buttonClick="register" color="success" />
 
                         </v-form>
                     </v-sheet>
@@ -122,7 +130,7 @@ export default {
                 <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn
-                        text="Close Dialog"
+                        text="Close"
                         @click="closeDialog"
                     ></v-btn>
                 </v-card-actions>
