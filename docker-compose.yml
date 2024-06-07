@@ -10,7 +10,7 @@ services:
         volumes:
             - /var/www/vendor
             - ./:/var/www
-            - ./.env:/var/www/.env
+            - ./.env.docker:/var/www/.env
         environment:
             - APP_ENV=local
         networks:
@@ -52,6 +52,8 @@ services:
         image: mysql:8.0
         container_name: my-mysql
         restart: unless-stopped
+        env_file:
+            - .env.docker
         environment:
             MYSQL_DATABASE: ${DB_DATABASE}
             MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}

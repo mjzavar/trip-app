@@ -1,30 +1,64 @@
 ## installation
 
-enter the project root directory via cmd and create the docker container  
+Enter the project root directory via cmd and create the docker container by running these commands
 
 ```
 docker-compose build
 ```
 
-then
-
+and then
 
 ```
 docker-compose up -d
 ```
-enter the app container  
+
+To migrate and seed the database , enter the app container  
 ```
 docker exec -it app bash
 ```
 
-run to create and seed the database 
+And run this command
+
 ```
-php artisan app:deploy
+php artisan db:build
 ```
 
-open the url in your browser
+open the app url in your browser and we are done 
 ```
-http://localhost:8000/
+http://localhost:8000
+```
+
+
+Here are the sourcecode directories for the backend
+
+
+controllers : 
+
+```
+app/Http/Controllers
+```
+
+models :
+```
+app/Models
+```
+
+services/actions :
+```
+app/Services
+```
+
+
+routes :
+```
+routes/app.php
+```
+
+
+You can find the forntend app files in here 
+
+```
+/resources/js
 ```
 
 
